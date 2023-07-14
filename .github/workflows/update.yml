@@ -1,0 +1,22 @@
+name: update
+on:
+  workflow_dispatch:
+
+jobs:
+  update-arknights:
+    name: Update Arknights
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run kaggle
+        uses: Frederisk/kaggle-action@v1.0.0
+        with:
+          username: ${{ secrets.KAGGLE_USERNAME }}
+          key: ${{ secrets.KAGGLE_KEY }}
+          title: update-arknights
+          code_file: .github/scripts/ArknightsStory.py
+          language: python
+          kernel_type: script
+          enable_gpu: enable
+          enable_internet: enable
