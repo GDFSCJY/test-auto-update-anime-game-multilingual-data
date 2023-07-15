@@ -5,8 +5,7 @@ repo_name = 'test-auto-update-anime-game-multilingual-data'
 
 
 def callsh(command):
-    command = command.split(' ')
-    status = subprocess.run(command)
+    status = subprocess.run(command, shell=True)
     status.check_returncode()
     print(status.stdout)
 
@@ -35,6 +34,7 @@ import numpy as np
 import pandas as pd
 import re
 from tqdm import tqdm
+import torch
 from transformers import MT5TokenizerFast
 from sentence_transformers import SentenceTransformer
 
@@ -131,10 +131,11 @@ df = df[df['ja_len'] >= 1]
 df = df[df['zh_len'] >= 1]
 
 # remove lines that LaBSE score is less than 0.6 or more than 0.99
-model = SentenceTransformer('sentence-transformers/LaBSE').cuda()
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = SentenceTransformer('sentence-transformers/LaBSE').to(device)
 
 _batch, _scores = [], []
-_bs = 64
+_bs = 32
 for i, row in tqdm(enumerate(df.itertuples()), total=df.shape[0]):
     inputs = [row.en, row.ja, row.zh]
     _batch.extend(inputs)
@@ -163,7 +164,8 @@ df.to_parquet('parquet/ArknightsStory.parquet', index=False)
 # commit
 import datetime
 time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-callsh(f'git commit -am \'updated at {time_str}\'')
+callsh('git add parquet/ArknightsStory.parquet')
+callsh(f'git commit -m \"updated at {time_str}\"')
 
 # push
 from kaggle_secrets import UserSecretsClient
