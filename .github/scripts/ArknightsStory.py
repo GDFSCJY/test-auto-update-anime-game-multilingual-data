@@ -1,8 +1,6 @@
 import os
 import subprocess
 
-repo_name = 'test-auto-update-anime-game-multilingual-data'
-
 
 def callsh(command):
     status = subprocess.run(command, shell=True)
@@ -28,7 +26,7 @@ callsh('git submodule update GAMEDATA/ArknightsData')
 # pip install sentence_transformers
 callsh('pip install sentence_transformers')
 
-
+from functools import partialmethod
 from glob import glob
 import numpy as np
 import pandas as pd
@@ -38,6 +36,8 @@ import torch
 from transformers import MT5TokenizerFast
 from sentence_transformers import SentenceTransformer
 
+# disable tqdm output, enable it when debug
+tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
 # load all en ja zh json file paths
 en_story_path = 'GAMEDATA/ArknightsData/en_US/gamedata/story'
@@ -135,7 +135,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = SentenceTransformer('sentence-transformers/LaBSE').to(device)
 
 _batch, _scores = [], []
-_bs = 32
+_bs = 8
 for i, row in tqdm(enumerate(df.itertuples()), total=df.shape[0]):
     inputs = [row.en, row.ja, row.zh]
     _batch.extend(inputs)
