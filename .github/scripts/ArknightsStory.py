@@ -1,3 +1,9 @@
+# kaggle environment
+from kaggle_secrets import UserSecretsClient
+user_secrets = UserSecretsClient()
+username = user_secrets.get_secret("GITHUB_USERNAME")
+token = user_secrets.get_secret("GITHUB_TOKEN")
+
 import os
 import subprocess
 
@@ -168,8 +174,4 @@ callsh('git add parquet/ArknightsStory.parquet')
 callsh(f'git commit -m \"updated at {time_str}\"')
 
 # push
-from kaggle_secrets import UserSecretsClient
-user_secrets = UserSecretsClient()
-username = user_secrets.get_secret("GITHUB_USERNAME")
-token = user_secrets.get_secret("GITHUB_TOKEN")
 callsh(f'git push https://{username}:{token}@github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')

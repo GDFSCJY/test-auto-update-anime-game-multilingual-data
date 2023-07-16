@@ -1,3 +1,10 @@
+# kaggle environment
+from kaggle_secrets import UserSecretsClient
+user_secrets = UserSecretsClient()
+username = user_secrets.get_secret("GITHUB_USERNAME")
+token = user_secrets.get_secret("GITHUB_TOKEN")
+
+
 import os
 import subprocess
 
@@ -116,8 +123,7 @@ df = df[df['ja_len'] >= 1]
 df = df[df['zh_len'] >= 1]
 
 # remove lines that LaBSE score is less than 0.6 or more than 0.99
-import numpy as np
-from sentence_transformers import SentenceTransformer
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = SentenceTransformer('sentence-transformers/LaBSE').cuda()
 
 
@@ -160,8 +166,4 @@ callsh('git add parquet/GenshinTextMap.parquet')
 callsh(f'git commit -m \"updated at {time_str}\"')
 
 # push
-from kaggle_secrets import UserSecretsClient
-user_secrets = UserSecretsClient()
-username = user_secrets.get_secret("GITHUB_USERNAME")
-token = user_secrets.get_secret("GITHUB_TOKEN")
 callsh(f'git push https://{username}:{token}@github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')
