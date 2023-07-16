@@ -122,7 +122,7 @@ model = SentenceTransformer('sentence-transformers/LaBSE').cuda()
 
 
 _batch, _scores = [], []
-_bs = 64
+_bs = 4
 for i, row in tqdm(enumerate(df.itertuples()), total=df.shape[0]):
     inputs = [row.en, row.ja, row.zh]
     _batch.extend(inputs)
