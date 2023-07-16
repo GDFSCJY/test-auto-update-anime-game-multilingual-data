@@ -9,14 +9,75 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run kaggle
+      - name: Run ArknightsStory in Kaggle
         uses: Frederisk/kaggle-action@v1.0.0
         with:
           username: ${{ secrets.KAGGLE_USERNAME }}
           key: ${{ secrets.KAGGLE_KEY }}
-          title: update-arknights
+          title: update-arknights-story
           code_file: .github/scripts/ArknightsStory.py
           language: python
           kernel_type: script
           enable_gpu: enable
           enable_internet: enable
+  update-genshin:
+    name: Update Genshin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run GenshinReadable in Kaggle
+        uses: Frederisk/kaggle-action@v1.0.0
+        with:
+          username: ${{ secrets.KAGGLE_USERNAME }}
+          key: ${{ secrets.KAGGLE_KEY }}
+          title: update-genshin-readable
+          code_file: .github/scripts/GenshinReadable.py
+          language: python
+          kernel_type: script
+          enable_gpu: enable
+          enable_internet: enable
+      - name: Run GenshinSubtitle in Kaggle
+        uses: Frederisk/kaggle-action@v1.0.0
+        with:
+          username: ${{ secrets.KAGGLE_USERNAME }}
+          key: ${{ secrets.KAGGLE_KEY }}
+          title: update-genshin-readable
+          code_file: .github/scripts/GenshinSubtitle.py
+          language: python
+          kernel_type: script
+          enable_gpu: enable
+          enable_internet: enable
+      - name: Run GenshinTextMap in Kaggle
+        uses: Frederisk/kaggle-action@v1.0.0
+        with:
+          username: ${{ secrets.KAGGLE_USERNAME }}
+          key: ${{ secrets.KAGGLE_KEY }}
+          title: update-genshin-readable
+          code_file: .github/scripts/GenshinTextmap.py
+          language: python
+          kernel_type: script
+          enable_gpu: enable
+          enable_internet: enable
+
+  update-readme:
+    needs:
+      - update-arknights
+      - update-genshin
+    name: Update README
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+          cache: pip
+      - name: Pip install dependencies
+        run: pip install pandas pyarrow tabulate
+      - name: Update README
+        run: python .github/update-readme.py
+        env:
+          MY_GITHUB_USERNAME: ${{ secrets.MY_GITHUB_USERNAME }}
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

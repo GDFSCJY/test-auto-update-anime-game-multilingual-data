@@ -1,3 +1,6 @@
 [submodule "GAMEDATA/ArknightsData"]
 	path = GAMEDATA/ArknightsData
 	url = https://github.com/Kengxxiao/ArknightsGameData.git
+[submodule "GAMEDATA/GenshinData"]
+	path = GAMEDATA/GenshinData
+	url = https://gitlab.com/Dimbreath/AnimeGameData.git
