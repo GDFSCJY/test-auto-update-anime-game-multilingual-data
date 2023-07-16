@@ -42,7 +42,7 @@ jobs:
         with:
           username: ${{ secrets.KAGGLE_USERNAME }}
           key: ${{ secrets.KAGGLE_KEY }}
-          title: update-genshin-readable
+          title: update-genshin-subtitle
           code_file: .github/scripts/GenshinSubtitle.py
           language: python
           kernel_type: script
@@ -53,7 +53,7 @@ jobs:
         with:
           username: ${{ secrets.KAGGLE_USERNAME }}
           key: ${{ secrets.KAGGLE_KEY }}
-          title: update-genshin-readable
+          title: update-genshin-textmap
           code_file: .github/scripts/GenshinTextmap.py
           language: python
           kernel_type: script
