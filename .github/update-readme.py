@@ -78,13 +78,3 @@ readme = readme_header + readme_menu + readme_sample + readme_footer
 
 with open('README.md', 'r', encoding='utf-8') as f:
     f.write(readme)
-
-# git add README.md
-callsh('git add README.md')
-# git commit -m 'update README.md'
-time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-callsh(f'git commit -m \'updated at {time_str}\'')
-# git push
-username = os.environ['MY_GITHUB_USERNAME']
-token = os.environ['MY_GITHUB_TOKEN']
-callsh(f'git push https://{username}:{token}@github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')

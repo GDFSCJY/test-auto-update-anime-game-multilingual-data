@@ -1,10 +1,3 @@
-# kaggle environment
-from kaggle_secrets import UserSecretsClient
-user_secrets = UserSecretsClient()
-username = user_secrets.get_secret("GITHUB_USERNAME")
-token = user_secrets.get_secret("GITHUB_TOKEN")
-
-
 import os
 import subprocess
 
@@ -15,16 +8,10 @@ def callsh(command):
     print(status.stdout)
 
 
-# git config --global user.name 'github-actions[bot]'
-callsh('git config --global user.name \'github-actions[bot]\'')
-# git config --global user.email '114514+github-actions[bot]@noreply.github.com'
-callsh('git config --global user.email \'114514+github-actions[bot]@noreply.github.com\'')
 # git clone https://github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git
 callsh('git clone https://github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')
 # cd update-anime-game-multilingual-data
 os.chdir('test-auto-update-anime-game-multilingual-data')
-# # git checkout -b github-action
-# callsh('git checkout -b github-action')
 # git submodule init GAMEDATA/GenshinData
 callsh('git submodule init GAMEDATA/GenshinData')
 # git submodule update GAMEDATA/GenshinData
@@ -142,13 +129,21 @@ for i, row in tqdm(enumerate(df.itertuples()), total=df.shape[0]):
             ]))
         _batch = []
 df = df.assign(score=_scores)
+df = df[df['score'] >= 0.6]
+df = df[df['score'] <= 0.99]
 
+# replace「」to “”, 『』to ‘’ in zh
+df['zh'] = df['zh'].apply(lambda x: x.replace('「', '“'))
+df['zh'] = df['zh'].apply(lambda x: x.replace('」', '”'))
+df['zh'] = df['zh'].apply(lambda x: x.replace('『', '‘'))
+df['zh'] = df['zh'].apply(lambda x: x.replace('』', '’'))
 
-# commit
-import datetime
-time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-callsh('git add parquet/GenshinSubtitle.parquet')
-callsh(f'git commit -m \"updated at {time_str}\"')
+# drop len and score column
+df = df.drop(columns=['en_len', 'ja_len', 'zh_len', 'score'])
 
-# push
-callsh(f'git push https://{username}:{token}@github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')
+# save to parquet
+df.to_parquet('../GenshinSubtitle.parquet', index=False)
+
+# remove repository
+os.chdir('../')
+callsh('rm -rf test-auto-update-anime-game-multilingual-data')

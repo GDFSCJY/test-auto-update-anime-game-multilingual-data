@@ -1,10 +1,3 @@
-# kaggle environment
-from kaggle_secrets import UserSecretsClient
-user_secrets = UserSecretsClient()
-username = user_secrets.get_secret("GITHUB_USERNAME")
-token = user_secrets.get_secret("GITHUB_TOKEN")
-
-
 import os
 import subprocess
 
@@ -15,16 +8,10 @@ def callsh(command):
     print(status.stdout)
 
 
-# git config --global user.name 'github-actions[bot]'
-callsh('git config --global user.name \'github-actions[bot]\'')
-# git config --global user.email '114514+github-actions[bot]@noreply.github.com'
-callsh('git config --global user.email \'114514+github-actions[bot]@noreply.github.com\'')
 # git clone https://github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git
 callsh('git clone https://github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')
 # cd update-anime-game-multilingual-data
 os.chdir('test-auto-update-anime-game-multilingual-data')
-# # git checkout -b github-action
-# callsh('git checkout -b github-action')
 # git submodule init GAMEDATA/GenshinData
 callsh('git submodule init GAMEDATA/GenshinData')
 # git submodule update GAMEDATA/GenshinData
@@ -155,14 +142,8 @@ df['zh'] = df['zh'].apply(lambda x: x.replace('』', '’'))
 df = df.drop(columns=['en_len', 'ja_len', 'zh_len', 'score'])
 
 # save to parquet
-df.to_parquet('parquet/GenshinReadable.parquet', index=False)
+df.to_parquet('../GenshinReadable.parquet', index=False)
 
-
-# commit
-import datetime
-time_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-callsh('git add parquet/GenshinReadable.parquet')
-callsh(f'git commit -m \"updated at {time_str}\"')
-
-# push
-callsh(f'git push https://{username}:{token}@github.com/GDFSCJY/test-auto-update-anime-game-multilingual-data.git')
+# remove repository
+os.chdir('../')
+callsh('rm -rf test-auto-update-anime-game-multilingual-data')
