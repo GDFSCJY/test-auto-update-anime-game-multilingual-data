@@ -13,6 +13,7 @@ jobs:
           kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
           kaggle_key: ${{ secrets.KAGGLE_KEY }}
           kernel_title: update-arknights-story
+          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-arknights-story
           code_file_path: .github/scripts/ArknightsStory.py
           language: python
           kernel_type: script
@@ -26,11 +27,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run GenshinReadable in Kaggle
-        uses: Frederisk/kaggle-action@v1.0.0
+        uses: Joel-hanson/kaggle-kernel-actions@V1
         with:
           kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
           kaggle_key: ${{ secrets.KAGGLE_KEY }}
           kernel_title: update-genshin-readable
+          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-genshin-readable
           code_file_path: .github/scripts/GenshinReadable.py
           language: python
           kernel_type: script
@@ -39,11 +41,12 @@ jobs:
           enable_internet: true
           collect_output: true
       - name: Run GenshinSubtitle in Kaggle
-        uses: Frederisk/kaggle-action@v1.0.0
+        uses: Joel-hanson/kaggle-kernel-actions@V1
         with:
           kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
           kaggle_key: ${{ secrets.KAGGLE_KEY }}
           kernel_title: update-genshin-subtitle
+          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-genshin-subtitle
           code_file_path: .github/scripts/GenshinSubtitle.py
           language: python
           kernel_type: script
@@ -52,11 +55,12 @@ jobs:
           enable_internet: true
           collect_output: true
       - name: Run GenshinTextMap in Kaggle
-        uses: Frederisk/kaggle-action@v1.0.0
+        uses: Joel-hanson/kaggle-kernel-actions@V1
         with:
           kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
           kaggle_key: ${{ secrets.KAGGLE_KEY }}
           kernel_title: update-genshin-textmap
+          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-genshin-textmap
           code_file_path: .github/scripts/GenshinTextMap.py
           language: python
           kernel_type: script
