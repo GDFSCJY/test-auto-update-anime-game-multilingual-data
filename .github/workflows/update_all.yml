@@ -87,14 +87,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: ./download
-        run:
-            # flatten download folder (move all files to download folder and remove subfolders)
+        run: |
             find ./download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
             find ./download -mindepth 1 -type d -exec rm -rf '{}' ';'
-            # replace parquet folder in repository with download folder
             rm -rf ./parquet
             mv ./download ./parquet
-            # add
             git add .
       - name: Setup Python
         uses: actions/setup-python@v4
