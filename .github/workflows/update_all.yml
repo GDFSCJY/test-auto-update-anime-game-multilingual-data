@@ -1,7 +1,6 @@
 name: Update All
 on:
   workflow_dispatch:
-
 jobs:
   update-arknights:
     name: Update Arknights
@@ -72,16 +71,18 @@ jobs:
             /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinReadable.parquet
             /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinSubtitle.parquet
             /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinTextMap.parquet
-
-  update-github:
+  update-repo:
     needs:
       - update-arknights
       - update-genshin
-    name: Update GitHub
+    name: Update Repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        run: |
+          git config --global user.name "Bot"
+          git config --global user.email "bot@noreply.gdfscjy.com"
       - name: Download Data
         uses: actions/download-artifact@v3
         with:
@@ -103,8 +104,6 @@ jobs:
         run: pip install pandas pyarrow tabulate
       - name: Update README
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.noreply.com"
           python .github/update-readme.py
           git add .
       - name: Commit changes
