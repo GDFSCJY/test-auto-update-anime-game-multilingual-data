@@ -6,8 +6,7 @@ jobs:
     name: Update Arknights
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Run ArknightsStory in Kaggle
         uses: Frederisk/kaggle-action@v1.0.0
         with:
@@ -28,8 +27,7 @@ jobs:
     name: Update Genshin
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Run GenshinReadable in Kaggle
         uses: Frederisk/kaggle-action@v1.0.0
         with:
@@ -78,18 +76,15 @@ jobs:
     name: Update Repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Configure Git
-        run: |
+      - uses: actions/checkout@v3
+      - run: |
           git config --global user.name "Bot"
           git config --global user.email "bot@noreply.gdfscjy.com"
       - name: Download Data
         uses: actions/download-artifact@v3
         with:
           path: ./download
-      - name: Clean Data
-        run: |
+      - run: |
             find ./download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
             find ./download -mindepth 1 -type d -exec rm -rf '{}' ';'
             rm -rf ./parquet
@@ -100,7 +95,7 @@ jobs:
         with:
           python-version: 3.8
           cache: pip
-        run: pip install pandas pyarrow tabulate
+      - run: pip install pandas pyarrow tabulate
       - name: Update README
         run: |
           python .github/update-readme.py
