@@ -24,7 +24,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: arknights-parquet
-          path: ArknightsStory.parquet
+          path: /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/ArknightsStory.parquet
   update-genshin:
     name: Update Genshin
     runs-on: ubuntu-latest
@@ -69,9 +69,9 @@ jobs:
         with:
           name: genshin-parquet
           path: |
-            GenshinReadable.parquet
-            GenshinSubtitle.parquet
-            GenshinTextMap.parquet
+            /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinReadable.parquet
+            /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinSubtitle.parquet
+            /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinTextMap.parquet
 
   update-github:
     needs:
@@ -83,8 +83,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.noreply
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.noreply.com"
       - name: Download Data
         uses: actions/download-artifact@v3
         with:
