@@ -1,4 +1,4 @@
-name: update-all
+name: Update All
 on:
   workflow_dispatch:
 
