@@ -8,21 +8,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run ArknightsStory in Kaggle
-        uses: Frederisk/kaggle-action@v1.0.0
+        uses: Joel-hanson/kaggle-kernel-actions@V1
         with:
-          username: ${{ secrets.KAGGLE_USERNAME }}
-          key: ${{ secrets.KAGGLE_KEY }}
-          title: update-arknights-story
-          code_file: .github/scripts/ArknightsStory.py
+          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
+          kaggle_key: ${{ secrets.KAGGLE_KEY }}
+          kernel_title: update-arknights-story
+          code_file_path: .github/scripts/ArknightsStory.py
           language: python
           kernel_type: script
-          enable_gpu: enable
-          enable_internet: enable
-      - name: Upload Data
-        uses: actions/upload-artifact@v3
-        with:
-          name: arknights-parquet
-          path: /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/ArknightsStory.parquet
+          is_private: true
+          enable_gpu: true
+          enable_internet: true
+          collect_output: true
   update-genshin:
     name: Update Genshin
     runs-on: ubuntu-latest
@@ -31,44 +28,42 @@ jobs:
       - name: Run GenshinReadable in Kaggle
         uses: Frederisk/kaggle-action@v1.0.0
         with:
-          username: ${{ secrets.KAGGLE_USERNAME }}
-          key: ${{ secrets.KAGGLE_KEY }}
-          title: update-genshin-readable
-          code_file: .github/scripts/GenshinReadable.py
+          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
+          kaggle_key: ${{ secrets.KAGGLE_KEY }}
+          kernel_title: update-genshin-readable
+          code_file_path: .github/scripts/GenshinReadable.py
           language: python
           kernel_type: script
-          enable_gpu: enable
-          enable_internet: enable
+          is_private: true
+          enable_gpu: true
+          enable_internet: true
+          collect_output: true
       - name: Run GenshinSubtitle in Kaggle
         uses: Frederisk/kaggle-action@v1.0.0
         with:
-          username: ${{ secrets.KAGGLE_USERNAME }}
-          key: ${{ secrets.KAGGLE_KEY }}
-          title: update-genshin-subtitle
-          code_file: .github/scripts/GenshinSubtitle.py
+          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
+          kaggle_key: ${{ secrets.KAGGLE_KEY }}
+          kernel_title: update-genshin-subtitle
+          code_file_path: .github/scripts/GenshinSubtitle.py
           language: python
           kernel_type: script
-          enable_gpu: enable
-          enable_internet: enable
+          is_private: true
+          enable_gpu: true
+          enable_internet: true
+          collect_output: true
       - name: Run GenshinTextMap in Kaggle
         uses: Frederisk/kaggle-action@v1.0.0
         with:
-          username: ${{ secrets.KAGGLE_USERNAME }}
-          key: ${{ secrets.KAGGLE_KEY }}
-          title: update-genshin-textmap
-          code_file: .github/scripts/GenshinTextMap.py
+          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
+          kaggle_key: ${{ secrets.KAGGLE_KEY }}
+          kernel_title: update-genshin-textmap
+          code_file_path: .github/scripts/GenshinTextMap.py
           language: python
           kernel_type: script
-          enable_gpu: enable
-          enable_internet: enable
-      - name: Upload Data
-        uses: actions/upload-artifact@v3
-        with:
-          name: genshin-parquet
-          path: |
-            /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinReadable.parquet
-            /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinSubtitle.parquet
-            /home/runner/work/_actions/Frederisk/kaggle-action/v1.0.0/GenshinTextMap.parquet
+          is_private: true
+          enable_gpu: true
+          enable_internet: true
+          collect_output: true
   update-repo:
     needs:
       - update-arknights
