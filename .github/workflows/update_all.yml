@@ -17,8 +17,6 @@ jobs:
             code_file: ./.github/scripts/GenshinTextMap.py
     uses: ./.github/workflows/update.yml
     with:
-      kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
-      kaggle_key: ${{ secrets.KAGGLE_KEY }}
       title: ${{ matrix.title }}
       code_file: ${{ matrix.code_file }}
       language: python
@@ -29,6 +27,9 @@ jobs:
       save_outputs: true
       outputs_path: outputs
       upload_to_artifact: true
+    secrets:
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
   update_repo:
     needs:
       - update
