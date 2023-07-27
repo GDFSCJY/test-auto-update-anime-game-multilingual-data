@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 jobs:
   update-data:
-    uses: ./.github/workflows/update.yml
     strategy:
       max-parallel: 2
       matrix:
@@ -27,6 +26,20 @@ jobs:
             code_file: ./.github/scripts/GenshinSubtitle.py
           - title: Genshin TextMap
             code_file: ./.github/scripts/GenshinTextMap.py
+    uses: ./.github/workflows/update.yml
+    with:
+      kaggle_username: ${{ matrix.kaggle_username }}
+      kaggle_key: ${{ matrix.kaggle_key }}
+      title: ${{ matrix.title }}
+      code_file: ${{ matrix.code_file }}
+      language: ${{ matrix.language }}
+      kernel_type: ${{ matrix.kernel_type }}
+      is_private: ${{ matrix.is_private }}
+      enable_gpu: ${{ matrix.enable_gpu }}
+      enable_internet: ${{ matrix.enable_internet }}
+      save_outputs: ${{ matrix.save_outputs }}
+      outputs_path: ${{ matrix.outputs_path }}
+      upload_to_artifact: ${{ matrix.upload_to_artifact }}
 
   update-repo:
     needs:
