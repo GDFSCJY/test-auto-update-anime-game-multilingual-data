@@ -1,5 +1,4 @@
 name: Update All
-
 on:
   workflow_dispatch:
 jobs:
@@ -7,16 +6,6 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        kaggle_username: [${{ secrets.KAGGLE_USERNAME }}]
-        kaggle_key: [${{ secrets.KAGGLE_KEY }}]
-        language: [python]
-        kernel_type: [script]
-        is_private: [true]
-        enable_gpu: [true]
-        enable_internet: [true]
-        save_outputs: [true]
-        outputs_path: [outputs]
-        upload_to_artifact: [true]
         include:
           - title: Arknights Story
             code_file: ./.github/scripts/ArknightsStory.py
@@ -28,19 +17,18 @@ jobs:
             code_file: ./.github/scripts/GenshinTextMap.py
     uses: ./.github/workflows/update.yml
     with:
-      kaggle_username: ${{ matrix.kaggle_username }}
-      kaggle_key: ${{ matrix.kaggle_key }}
+      kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
+      kaggle_key: ${{ secrets.KAGGLE_KEY }}
       title: ${{ matrix.title }}
       code_file: ${{ matrix.code_file }}
-      language: ${{ matrix.language }}
-      kernel_type: ${{ matrix.kernel_type }}
-      is_private: ${{ matrix.is_private }}
-      enable_gpu: ${{ matrix.enable_gpu }}
-      enable_internet: ${{ matrix.enable_internet }}
-      save_outputs: ${{ matrix.save_outputs }}
-      outputs_path: ${{ matrix.outputs_path }}
-      upload_to_artifact: ${{ matrix.upload_to_artifact }}
-
+      language: python
+      kernel_type: script
+      is_private: true
+      enable_gpu: true
+      enable_internet: true
+      save_outputs: true
+      outputs_path: outputs
+      upload_to_artifact: true
   update_repo:
     needs:
       - update
