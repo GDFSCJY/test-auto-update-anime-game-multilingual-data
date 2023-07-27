@@ -27,6 +27,10 @@ jobs:
       save_outputs: true
       outputs_path: outputs
       upload_to_artifact: true
+    secrets:
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+
   update_repo:
     needs:
       - update_data
