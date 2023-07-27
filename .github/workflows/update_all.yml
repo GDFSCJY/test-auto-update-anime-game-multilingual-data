@@ -32,7 +32,7 @@ jobs:
       KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
   update_repo:
     needs:
-      - update
+      - update_data
     name: Update Repository
     runs-on: ubuntu-latest
     steps:
