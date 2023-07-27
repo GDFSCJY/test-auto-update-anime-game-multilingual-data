@@ -1,81 +1,36 @@
 name: Update All
+
 on:
   workflow_dispatch:
 jobs:
-  update-arknights:
-    name: Update Arknights
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run ArknightsStory in Kaggle
-        uses: Joel-hanson/kaggle-kernel-actions@V1
-        with:
-          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
-          kaggle_key: ${{ secrets.KAGGLE_KEY }}
-          kaggle_make_new_kernel: true
-          kernel_title: update-arknights-story
-          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-arknights-story
-          code_file_path: .github/scripts/ArknightsStory.py
-          language: python
-          kernel_type: script
-          is_private: true
-          enable_gpu: true
-          enable_internet: true
-          collect_output: true
-  update-genshin:
-    name: Update Genshin
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run GenshinReadable in Kaggle
-        uses: Joel-hanson/kaggle-kernel-actions@V1
-        with:
-          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
-          kaggle_key: ${{ secrets.KAGGLE_KEY }}
-          kaggle_make_new_kernel: true
-          kernel_title: update-genshin-readable
-          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-genshin-readable
-          code_file_path: .github/scripts/GenshinReadable.py
-          language: python
-          kernel_type: script
-          is_private: true
-          enable_gpu: true
-          enable_internet: true
-          collect_output: true
-      - name: Run GenshinSubtitle in Kaggle
-        uses: Joel-hanson/kaggle-kernel-actions@V1
-        with:
-          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
-          kaggle_key: ${{ secrets.KAGGLE_KEY }}
-          kaggle_make_new_kernel: true
-          kernel_title: update-genshin-subtitle
-          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-genshin-subtitle
-          code_file_path: .github/scripts/GenshinSubtitle.py
-          language: python
-          kernel_type: script
-          is_private: true
-          enable_gpu: true
-          enable_internet: true
-          collect_output: true
-      - name: Run GenshinTextMap in Kaggle
-        uses: Joel-hanson/kaggle-kernel-actions@V1
-        with:
-          kaggle_username: ${{ secrets.KAGGLE_USERNAME }}
-          kaggle_key: ${{ secrets.KAGGLE_KEY }}
-          kaggle_make_new_kernel: true
-          kernel_title: update-genshin-textmap
-          kernel_id: ${{ secrets.KAGGLE_USERNAME }}/update-genshin-textmap
-          code_file_path: .github/scripts/GenshinTextMap.py
-          language: python
-          kernel_type: script
-          is_private: true
-          enable_gpu: true
-          enable_internet: true
-          collect_output: true
+  update-data:
+    uses: ./.github/workflows/update.yml
+    strategy:
+      max-parallel: 2
+      matrix:
+        kaggle_username: [${{ secrets.KAGGLE_USERNAME }}]
+        kaggle_key: [${{ secrets.KAGGLE_KEY }}]
+        language: [python]
+        kernel_type: [script]
+        is_private: [true]
+        enable_gpu: [true]
+        enable_internet: [true]
+        save_outputs: [true]
+        outputs_path: [outputs]
+        upload_to_artifact: [true]
+        include:
+          - title: Arknights Story
+            code_file: ./.github/scripts/ArknightsStory.py
+          - title: Genshin Readable
+            code_file: ./.github/scripts/GenshinReadable.py
+          - title: Genshin Subtitle
+            code_file: ./.github/scripts/GenshinSubtitle.py
+          - title: Genshin TextMap
+            code_file: ./.github/scripts/GenshinTextMap.py
+
   update-repo:
     needs:
-      - update-arknights
-      - update-genshin
+      - update
     name: Update Repository
     runs-on: ubuntu-latest
     steps:
@@ -88,19 +43,14 @@ jobs:
         with:
           path: ./download
       - run: |
-            find ./download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
-            find ./download -mindepth 1 -type d -exec rm -rf '{}' ';'
-            rm -rf ./parquet
-            mv ./download ./parquet
-            git add .
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
-          cache: pip
-      - run: pip install pandas pyarrow tabulate
+          find ./download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
+          find ./download -mindepth 1 -type d -exec rm -rf '{}' ';'
+          rm -rf ./parquet
+          mv ./download ./parquet
+          git add .
       - name: Update README
         run: |
+          pip install pandas pyarrow tabulate
           python .github/update-readme.py
           git add .
       - name: Commit changes

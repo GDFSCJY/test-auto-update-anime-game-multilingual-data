@@ -1,0 +1,110 @@
+on:
+  workflow_call:
+    inputs:
+      kaggle_username:
+        description: kaggle username
+        type: string
+        required: true
+      kaggle_key:
+        description: kaggle key
+        type: string
+        required: true
+      title:
+        description: The title of the kernel
+        type: string
+        required: true
+      code_file:
+        description: The path to your kernel source code
+        type: string
+        required: true
+      language:
+        description: The language your kernel is written in, python or r
+        type: string
+        default: python
+      kernel_type:
+        description: The type of kernel, notebook or script
+        type: string
+        default: script
+      is_private:
+        description: Whether or not the kernel should be private
+        type: boolean
+        default: true
+      enable_gpu:
+        description: Whether or not the kernel should run on a GPU
+        type: boolean
+        default: true
+      enable_internet:
+        description: Whether or not the kernel should have internet access
+        type: boolean
+        default: true
+      save_outputs:
+        description: Whether or not the kernel should save outputs
+        type: boolean
+        default: true
+      outputs_path:
+        description: The path to save outputs to
+        type: string
+        default: outputs
+      upload_to_artifact:
+        description: Whether or not the kernel should upload outputs to an artifact
+        type: boolean
+        default: false
+
+jobs:
+  update_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Kaggle API
+        run: python -m pip install --upgrade kaggle --user
+      - name: Setup kaggle.json
+        run: |
+          mkdir -p ~/.kaggle
+          echo "{ \
+          \"username\":\"${{ inputs.kaggle_username }}\", \
+          \"key\":\"${{ inputs.kaggle_key }}\" \
+          }" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+      - name: Push kernel
+        working-directory: ${{ github.action_path }}
+        run: |
+          kaggle kernels init -p ${{ github.action_path }}
+          sed -i "s/INSERT_KERNEL_SLUG_HERE/${{ inputs.title }}/g" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "s/INSERT_TITLE_HERE/${{ inputs.title }}/g" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "s/INSERT_CODE_FILE_HERE/${{ inputs.code_file }}/g" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "/language/{s/.*/  \"language\": \"${{ inputs.language }}\",/}" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "/kernel_type/{s/.*/  \"kernel_type\": \"${{ inputs.kernel_type }}\",/}" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "/is_private/{s/.*/  \"is_private\": ${{ inputs.is_private }},/}" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "/enable_gpu/{s/.*/  \"enable_gpu\": ${{ inputs.enable_gpu }},/}" ${{ github.action_path }}/kernel-metadata.json
+          sed -i "/enable_internet/{s/.*/  \"enable_internet\": ${{ inputs.enable_internet }},/}" ${{ github.action_path }}/kernel-metadata.json
+          kaggle kernels push
+      - name: Check status
+        working-directory: ${{ github.action_path }}
+        run: |
+          kernel_name=$(jq -r '.id' kernel-metadata.json)
+          while true; do
+            status=$(kaggle kernels status $kernel_name)
+            echo $status
+            if [[ $status == *"complete"* ]]; then
+              echo "Kernel run complete"
+              if [[ ${{ inputs.save_outputs }} == "true" ]]; then
+                echo "Saving outputs"
+                mkdir -p ${{ inputs.outputs_path }}
+                kaggle kernels output $kernel_name -p ${{ inputs.outputs_path }}
+              fi
+              break
+            elif [[ $status == *"error"* ]]; then
+              echo "Kernel failed to run, check the logs in the output tab"
+              break
+            elif [[ $status == *"cancel"* ]]; then
+              echo "Kernel cancelled"
+              break
+            else
+              sleep 10
+            fi
+          done
+      - name: Upload to artifact
+        if: ${{ inputs.upload_to_artifact }} == "true"
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.title }}-outputs
+          path: ${{ inputs.outputs_path }}
