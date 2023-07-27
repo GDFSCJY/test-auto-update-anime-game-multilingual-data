@@ -1,5 +1,12 @@
 on:
   workflow_call:
+    secrets:
+      KAGGLE_USERNAME: 
+        description: The username of kaggle
+        required: true
+      KAGGLE_KEY:
+        description: The token of kaggle
+        required: true
     inputs:
       title:
         description: The title of the kernel
