@@ -1,14 +1,6 @@
 on:
   workflow_call:
     inputs:
-      kaggle_username:
-        description: kaggle username
-        type: string
-        required: true
-      kaggle_key:
-        description: kaggle key
-        type: string
-        required: true
       title:
         description: The title of the kernel
         type: string
@@ -60,8 +52,8 @@ jobs:
         run: |
           mkdir -p ~/.kaggle
           echo "{ \
-          \"username\":\"${{ inputs.kaggle_username }}\", \
-          \"key\":\"${{ inputs.kaggle_key }}\" \
+          \"username\":\"${{ secrets.KAGGLE_USERNAME }}\", \
+          \"key\":\"${{ secrets.KAGGLE_KEY }}\" \
           }" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
       - name: Push kernel
