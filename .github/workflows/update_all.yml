@@ -3,7 +3,7 @@ name: Update All
 on:
   workflow_dispatch:
 jobs:
-  update-data:
+  update_data:
     strategy:
       max-parallel: 2
       matrix:
@@ -41,7 +41,7 @@ jobs:
       outputs_path: ${{ matrix.outputs_path }}
       upload_to_artifact: ${{ matrix.upload_to_artifact }}
 
-  update-repo:
+  update_repo:
     needs:
       - update
     name: Update Repository
