@@ -66,15 +66,15 @@ jobs:
       - name: Push kernel
         working-directory: ${{ github.action_path }}
         run: |
-          kaggle kernels init -p ${{ github.action_path }}
-          sed -i "s/INSERT_KERNEL_SLUG_HERE/${{ inputs.title }}/g" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "s/INSERT_TITLE_HERE/${{ inputs.title }}/g" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "s/INSERT_CODE_FILE_HERE/${{ inputs.code_file }}/g" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "/language/{s/.*/  \"language\": \"${{ inputs.language }}\",/}" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "/kernel_type/{s/.*/  \"kernel_type\": \"${{ inputs.kernel_type }}\",/}" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "/is_private/{s/.*/  \"is_private\": ${{ inputs.is_private }},/}" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "/enable_gpu/{s/.*/  \"enable_gpu\": ${{ inputs.enable_gpu }},/}" ${{ github.action_path }}/kernel-metadata.json
-          sed -i "/enable_internet/{s/.*/  \"enable_internet\": ${{ inputs.enable_internet }},/}" ${{ github.action_path }}/kernel-metadata.json
+          kaggle kernels init
+          sed -i "s/INSERT_KERNEL_SLUG_HERE/${{ inputs.title }}/g" kernel-metadata.json
+          sed -i "s/INSERT_TITLE_HERE/${{ inputs.title }}/g" kernel-metadata.json
+          sed -i "s/INSERT_CODE_FILE_HERE/${{ inputs.code_file }}/g" kernel-metadata.json
+          sed -i "/language/{s/.*/  \"language\": \"${{ inputs.language }}\",/}" kernel-metadata.json
+          sed -i "/kernel_type/{s/.*/  \"kernel_type\": \"${{ inputs.kernel_type }}\",/}" kernel-metadata.json
+          sed -i "/is_private/{s/.*/  \"is_private\": ${{ inputs.is_private }},/}" kernel-metadata.json
+          sed -i "/enable_gpu/{s/.*/  \"enable_gpu\": ${{ inputs.enable_gpu }},/}" kernel-metadata.json
+          sed -i "/enable_internet/{s/.*/  \"enable_internet\": ${{ inputs.enable_internet }},/}" kernel-metadata.json
           kaggle kernels push
       - name: Check status
         working-directory: ${{ github.action_path }}
