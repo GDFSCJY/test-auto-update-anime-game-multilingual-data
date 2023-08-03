@@ -8,14 +8,14 @@ jobs:
       matrix:
         include:
           - title: Arknights Story
-            code_file: ./.github/scripts/ArknightsStory.py
+            code_file: .github/scripts/ArknightsStory.py
           - title: Genshin Readable
-            code_file: ./.github/scripts/GenshinReadable.py
+            code_file: .github/scripts/GenshinReadable.py
           - title: Genshin Subtitle
-            code_file: ./.github/scripts/GenshinSubtitle.py
+            code_file: .github/scripts/GenshinSubtitle.py
           - title: Genshin TextMap
-            code_file: ./.github/scripts/GenshinTextMap.py
-    uses: ./.github/workflows/update.yml
+            code_file: .github/scripts/GenshinTextMap.py
+    uses: .github/workflows/update.yml
     with:
       title: ${{ matrix.title }}
       code_file: ${{ matrix.code_file }}

@@ -75,6 +75,7 @@ jobs:
           sed -i "/is_private/{s/.*/  \"is_private\": \"${{ inputs.is_private }}\",/}" kernel-metadata.json
           sed -i "/enable_gpu/{s/.*/  \"enable_gpu\": \"${{ inputs.enable_gpu }}\",/}" kernel-metadata.json
           sed -i "/enable_internet/{s/.*/  \"enable_internet\": \"${{ inputs.enable_internet }}\",/}" kernel-metadata.json
+          cat kernel-metadata.json | jq
           kaggle kernels push
       - name: Check status
         working-directory: ${{ github.action_path }}
