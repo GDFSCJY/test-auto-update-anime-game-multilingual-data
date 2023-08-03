@@ -80,9 +80,9 @@ jobs:
           kaggle kernels push
       - name: Check status
         run: |
-          kernel_name=$(jq -r '.id' kernel-metadata.json)
+          kernel_name=$(jq -r '.title' kernel-metadata.json)
           while true; do
-            status=$(kaggle kernels status $kernel_name)
+            status=$(kaggle kernels status \"$kernel_name\")
             echo $status
             if [[ $status == *"complete"* ]]; then
               echo "Kernel run complete"
