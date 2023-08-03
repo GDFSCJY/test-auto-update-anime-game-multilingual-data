@@ -64,9 +64,8 @@ jobs:
           }" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
       - name: Push kernel
-        working-directory: ${{ github.action_path }}
         run: |
-          json_path=${{ github.action_path }}/kernel-metadata.json
+          json_path=kernel-metadata.json
           kaggle kernels init -p ${{ github.action_path }}
           sed -i "s|INSERT_KERNEL_SLUG_HERE|${{ inputs.title }}|g" $json_path
           sed -i "s|INSERT_TITLE_HERE|${{ inputs.title }}|g" $json_path
@@ -79,7 +78,6 @@ jobs:
           cat $json_path | jq
           kaggle kernels push
       - name: Check status
-        working-directory: ${{ github.action_path }}
         run: |
           kernel_name=$(jq -r '.id' kernel-metadata.json)
           while true; do
