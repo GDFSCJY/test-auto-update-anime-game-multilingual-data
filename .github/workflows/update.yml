@@ -69,7 +69,7 @@ jobs:
           kaggle kernels init
           sed -i "s|INSERT_KERNEL_SLUG_HERE|${{ inputs.title }}|g" kernel-metadata.json
           sed -i "s|INSERT_TITLE_HERE|${{ inputs.title }}|g" kernel-metadata.json
-          sed -i "s|INSERT_CODE_FILE_PATH_HERE|${{ inputs.code_file }}|g" kernel-metadata.json
+          sed -i "s|INSERT_CODE_FILE_PATH_HERE|${{ github.workspace }}/${{ inputs.code_file }}|g" kernel-metadata.json
           sed -i "/language/{s/.*/  \"language\": \"${{ inputs.language }}\",/}" kernel-metadata.json
           sed -i "/kernel_type/{s/.*/  \"kernel_type\": \"${{ inputs.kernel_type }}\",/}" kernel-metadata.json
           sed -i "/is_private/{s/.*/  \"is_private\": \"${{ inputs.is_private }}\",/}" kernel-metadata.json
