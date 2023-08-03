@@ -66,7 +66,7 @@ jobs:
       - name: Push kernel
         run: |
           json_path=kernel-metadata.json
-          kaggle kernels init -p ${{ github.action_path }}
+          kaggle kernels init
           sed -i "s|INSERT_KERNEL_SLUG_HERE|${{ inputs.title }}|g" $json_path
           sed -i "s|INSERT_TITLE_HERE|${{ inputs.title }}|g" $json_path
           sed -i "s|INSERT_CODE_FILE_PATH_HERE|${{ github.workspace }}/${{ inputs.code_file }}|g" $json_path
