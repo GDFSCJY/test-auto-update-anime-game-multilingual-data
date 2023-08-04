@@ -82,9 +82,9 @@ jobs:
         run: |
           kernel_name=$(jq -r '.title' kernel-metadata.json)
           while true; do
-            status=$(kaggle kernels status \"$kernel_name\")
-            echo $status
-            if [[ $status == *"complete"* ]]; then
+            kernel_status=$(kaggle kernels status \"$kernel_name\")
+            echo kernel_status
+            if [[ kernel_status == *"complete"* ]]; then
               echo "Kernel run complete"
               if [[ ${{ inputs.save_outputs }} == "true" ]]; then
                 echo "Saving outputs"
@@ -92,10 +92,10 @@ jobs:
                 kaggle kernels output $kernel_name -p ${{ inputs.outputs_path }}
               fi
               break
-            elif [[ $status == *"error"* ]]; then
+            elif [[ kernel_status == *"error"* ]]; then
               echo "Kernel failed to run, check the logs in the output tab"
               break
-            elif [[ $status == *"cancel"* ]]; then
+            elif [[ kernel_status == *"cancel"* ]]; then
               echo "Kernel cancelled"
               break
             else

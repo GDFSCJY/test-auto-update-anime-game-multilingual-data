@@ -7,13 +7,13 @@ jobs:
       max-parallel: 2
       matrix:
         include:
-          - title: Arknights Story
+          - title: arknights-story
             code_file: .github/scripts/ArknightsStory.py
-          - title: Genshin Readable
+          - title: genshin-readable
             code_file: .github/scripts/GenshinReadable.py
-          - title: Genshin Subtitle
+          - title: genshin-subtitle
             code_file: .github/scripts/GenshinSubtitle.py
-          - title: Genshin TextMap
+          - title: genshin-textmap
             code_file: .github/scripts/GenshinTextMap.py
     uses: ./.github/workflows/update.yml
     with:
