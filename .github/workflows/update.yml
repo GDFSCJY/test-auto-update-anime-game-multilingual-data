@@ -101,7 +101,6 @@ jobs:
               sleep 10
             fi
           done
-          sudo apt-get install -y tree
           tree ${{ inputs.outputs_path }}
       - name: Upload to artifact
         if: ${{ inputs.upload_to_artifact }} == "true"

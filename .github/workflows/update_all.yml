@@ -38,18 +38,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: |
-          git config --global user.name "Bot"
-          git config --global user.email "bot@noreply.gdfscjy.com"
       - name: Download Data
         uses: actions/download-artifact@v3
         with:
-          path: ./download
+          path: ${{ github.workspace }}/download
       - run: |
-          find ./download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
-          find ./download -mindepth 1 -type d -exec rm -rf '{}' ';'
-          rm -rf ./parquet
-          mv ./download ./parquet
+          git config --global user.name "Bot"
+          git config --global user.email "bot@noreply.gdfscjy.com"
+          tree ${{ github.workspace }}/download
+          find ${{ github.workspace }}/download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
+          find ${{ github.workspace }}/download -mindepth 1 -type d -exec rm -rf '{}' ';'
+          rm -rf ${{ github.workspace }}/parquet
+          mv ${{ github.workspace }}/download ${{ github.workspace }}/parquet
           git add .
       - name: Update README
         run: |
