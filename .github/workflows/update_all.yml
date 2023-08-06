@@ -47,14 +47,15 @@ jobs:
           git config --global user.email "bot@noreply.gdfscjy.com"
           tree ${{ github.workspace }}/download
           find ${{ github.workspace }}/download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
-          find ${{ github.workspace }}/download -mindepth 1 -type d -exec rm -rf '{}' ';'
+          find ${{ github.workspace }}/download -mindepth 1 -type d -empty -delete
+          find ${{ github.workspace }}/download -mindepth 1 -type f '*.log' -delete
           rm -rf ${{ github.workspace }}/parquet
           mv ${{ github.workspace }}/download ${{ github.workspace }}/parquet
           git add .
       - name: Update README
         run: |
           pip install pandas pyarrow tabulate
-          python .github/update-readme.py
+          python ${{ github.workspace }}/.github/update-readme.py
           git add .
       - name: Commit changes
         run: |
