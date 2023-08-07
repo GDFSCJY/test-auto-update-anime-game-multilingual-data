@@ -49,7 +49,7 @@ readme_menu = ''
 readme_sample = ''
 
 for game_name in game_names:
-    readme_sample += f'## {game_name}\n\n'
+    readme_sample += f'\r## {game_name}\n\n'
     samples = ''
     lang_set = set()
     for parquet_name in game_names[game_name]:
@@ -63,18 +63,18 @@ for game_name in game_names:
         sample_df = pd.concat([df.head(5), df.tail(5)])
 
         samples += f'''
-        ### {parquet_name}: {df_len} rows
+### {parquet_name}: {df_len} rows
         
-        {sample_df.to_markdown()}
+{sample_df.to_markdown()}
 
         '''
 
     readme_sample += f'### Languages: {", ".join(list(lang_set))}\n\n'
     readme_sample += samples
 
-    readme_menu += f'- [{game_name}](#{game_name}): {sum([v for v in game_names[game_name].values()])}\n'
+    readme_menu += f'- [{game_name}](#{"-".join(game_name.split())}): {sum([v for v in game_names[game_name].values()])}\n'
 
 readme = readme_header + readme_menu + readme_sample + readme_footer
 
-with open('README.md', 'r', encoding='utf-8') as f:
+with open('README.md', 'w', encoding='utf-8') as f:
     f.write(readme)
