@@ -48,7 +48,7 @@ jobs:
           tree ${{ github.workspace }}/download
           find ${{ github.workspace }}/download -mindepth 2 -type f -exec mv -i '{}' ./download ';'
           find ${{ github.workspace }}/download -mindepth 1 -type d -empty -delete
-          find ${{ github.workspace }}/download -mindepth 1 -type f '*.log' -delete
+          find ${{ github.workspace }}/download -mindepth 1 -type f -name '*.log' -delete
           rm -rf ${{ github.workspace }}/parquet
           mv ${{ github.workspace }}/download ${{ github.workspace }}/parquet
           git add .
