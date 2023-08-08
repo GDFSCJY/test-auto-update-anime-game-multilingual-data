@@ -52,8 +52,8 @@ jobs:
           find ${{ github.workspace }}/download -mindepth 1 -type f -name '*.log' -delete
           rm -rf ${{ github.workspace }}/parquet
           mv ${{ github.workspace }}/download ${{ github.workspace }}/parquet
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email ${{ secrets.GIT_EMAIL }}
+          git config --local user.name ${{ secrets.GIT_NAME }}
           git add .
       - name: Update README
         run: |
@@ -66,4 +66,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
+          github_token: ${{ secrets.PAT_GITHUB }}
           branch: ${{ github.ref }}
